@@ -1,2 +1,2 @@
 # devconnector
-Test Web for connecting developers
+Social network for developers
