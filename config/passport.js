@@ -11,14 +11,13 @@ opts.secretOrKey = keys.secretKey;
 
 module.exports = passport => {
   passport.use(
-    new JwtStrategy(opts, (jwt_payload, done) => {
-      User.findById(jwt_payload.id, '-password', (err, user) => {
-        if (user) {
-          return done(null, user);
-        } else {
-          return done(null, false);
-        }
-      });
+    new JwtStrategy(opts, async (jwt_payload, done) => {
+      let user = await User.findById(jwt_payload.id, '-password');
+      if (user) {
+        return done(null, user);
+      } else {
+        return done(null, false);
+      }
     })
   );
 };
