@@ -1,26 +1,26 @@
 const express = require('express');
 
 const router = express.Router();
-const passport = require('passport');
+const passport = require("passport");
 
-const Profile = require('../models/Profile');
-const Post = require('../models/Post');
+const Profile = require("../models/Profile");
+const Post = require("../models/Post");
 
 // load post validation
-const validatePostInput = require('../../validation/post');
+const validatePostInput = require("../../validation/post");
 
 /**
  * @route   GET api/posts/
  * @desc    Get all post
  * @access  Public
  */
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const posts = await Post.find({}).sort({ date: -1 });
     if (posts.length > 0) {
       res.json(posts);
     } else {
-      return res.status(404).json({ noPostsFound: 'No posts found' });
+      return res.status(404).json({ noPostsFound: "No posts found" });
     }
   } catch (error) {
     res.status(404).json(error);
@@ -32,13 +32,13 @@ router.get('/', async (req, res) => {
  * @desc    Get post by id
  * @access  Public
  */
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (post) {
       res.json(post);
     } else {
-      return res.status(404).json({ noPostFound: 'Post not found' });
+      return res.status(404).json({ noPostFound: "Post not found" });
     }
   } catch (error) {
     res.status(404).json(error);
@@ -51,8 +51,8 @@ router.get('/:id', async (req, res) => {
  * @access  Private
  */
 router.post(
-  '/',
-  passport.authenticate('jwt', { session: false }),
+  "/",
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = validatePostInput(req.body);
     // Check of validation
@@ -82,8 +82,8 @@ router.post(
  * @access  Private
  */
 router.delete(
-  '/:id',
-  passport.authenticate('jwt', { session: false }),
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const user = await Profile.findOne({ user: req.user.id });
     if (user) {
@@ -92,14 +92,16 @@ router.delete(
         if (post) {
           // check for post owner
           if (post.user.toString() !== req.user.id) {
-            return res.status(401).json({ notAuthorized: 'You are not authorized' });
+            return res
+              .status(401)
+              .json({ notAuthorized: "You are not authorized" });
           }
 
           // delete
           await post.remove();
           res.json({ success: true });
         } else {
-          return res.status(404).json({ noPostFound: 'Post not found' });
+          return res.status(404).json({ noPostFound: "Post not found" });
         }
       } catch (error) {
         res.status(404).json(error);
@@ -121,7 +123,7 @@ router.post(
     if (user) {
       try {
         const post = await Post.findById(req.params.id);
-        if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0) {return res.status(400).json({ alreadyLiked: 'User already liked this post' });}
+        if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0) { return res.status(400).json({ alreadyLiked: 'User already liked this post' }); }
 
         // Add user id to likes array
         post.likes.unshift({ user: req.user.id });
@@ -147,7 +149,7 @@ router.post(
     if (user) {
       try {
         const post = await Post.findById(req.params.id);
-        if (post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {return res.status(400).json({ notLiked: 'You have not yet liked this post' });}
+        if (post.likes.filter(like => like.user.toString() === req.user.id).length === 0) { return res.status(400).json({ notLiked: 'You have not yet liked this post' }); }
 
         // Get remove index
         const removeIndex = post.likes
