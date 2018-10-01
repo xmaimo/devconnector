@@ -18,11 +18,9 @@ const validateEducationInput = require('../../validation/education');
  */
 router.get('/all', async (req, res) => {
   const errors = {};
+  ss
   try {
-    const profiles = await Profile.find({}).populate('user', [
-      'name',
-      'avatar'
-    ]);
+    const profiles = await Profile.find({}).populate('user', ['name', 'avatar']);
 
     if (!profiles) {
       errors.noProfiles = 'No profiles found';
@@ -70,15 +68,15 @@ router.get('/handle/:handle', (req, res) => {
 
   Profile.findOne({ handle: req.params.handle })
     .populate('user', ['name', 'avatar'])
-    .then(profile => {
+    .then((profile) => {
       if (!profile) {
         errors.noProfile = 'There is no profile for this handle';
         return res.status(404).json(errors);
       }
 
-      res.json(profile);
+      return res.json(profile);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(404).json(err);
     });
 }); // End GET api/profile/handle/:handle
@@ -313,8 +311,7 @@ router.delete(
   (req, res) => {
     Profile.findOneAndRemove({ user: req.user.id }).then(() => {
       User.findOneAndRemove({ _id: req.user.id }).then(() =>
-        res.json({ success: true })
-      );
+        res.json({ success: true }));
     });
   }
 ); // End DELETE api/profile/
