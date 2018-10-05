@@ -19,7 +19,6 @@ const validateEducationInput = require('../../validation/education');
  */
 router.get('/all', async (req, res) => {
   const errors = {};
-  ss
   try {
     const profiles = await Profile.find({}).populate('user', ['name', 'avatar']);
 
