@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 
+import TextFieldGroup from '../common/TextFieldGroup';
 
 import * as actionCreators from '../../rdx_actions/'
 
@@ -64,51 +65,39 @@ class Register extends Component {
               <h1 className="display-4 text-center">Sign Up</h1>
               <p className="lead text-center">Create your DevConnector account</p>
               <form onSubmit={this.onSubmit}>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className={classnames("form-control form-control-lg", { 'is-invalid': name })}
-                    placeholder="Name"
-                    name="name"
-                    value={this.state.name}
-                    onChange={this.onChange} />
+                <TextFieldGroup
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                  error={name}
+                  value={this.state.name}
+                  onChange={this.onChange} />
 
-                  {name && (<div className="invalid-feedback">{name}</div>)}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="email"
-                    className={classnames("form-control form-control-lg", { 'is-invalid': email })}
-                    placeholder="Email Address"
-                    name="email"
-                    value={this.state.email}
-                    onChange={this.onChange} />
-                  {email && (<div className="invalid-feedback">{email}</div>)}
+                <TextFieldGroup
+                  type="email"
+                  placeholder="Email"
+                  name="email"
+                  error={email}
+                  info='This site uses Gravatar so if you want a profile image, use a Gravatar email'
+                  value={this.state.email}
+                  onChange={this.onChange} />
 
-                  <small className="form-text text-muted">This site uses Gravatar so if you want a profile image, use a Gravatar email</small>
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={classnames("form-control form-control-lg", { 'is-invalid': password })}
-                    placeholder="Password"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChange} />
-                  {password && (<div className="invalid-feedback">{password}</div>)}
+                <TextFieldGroup
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  error={password}
+                  value={this.state.password}
+                  onChange={this.onChange} />
 
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={classnames("form-control form-control-lg", { 'is-invalid': password2 })}
-                    placeholder="Confirm Password"
-                    name="password2"
-                    value={this.state.password2}
-                    onChange={this.onChange} />
-                  {password2 && (<div className="invalid-feedback">{password2}</div>)}
+                <TextFieldGroup
+                  type="password"
+                  placeholder="Confirm Password"
+                  name="password"
+                  error={password2}
+                  value={this.state.password2}
+                  onChange={this.onChange} />
 
-                </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>
