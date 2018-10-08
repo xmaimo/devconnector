@@ -1,8 +1,41 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from "react-redux";
+
+import * as actionCreators from '../../rdx_actions/index';
 
 class Navbar extends Component {
+  onLogoutClick(evt) {
+    evt.preventDefault();
+    this.props.onLogoutUser();
+  }
   render() {
+    const { isAuthenticated, user } = this.props.auth
+    let authLinks = null;
+
+    if (isAuthenticated) {
+      authLinks = (
+        <ul className="navbar-nav ml-auto">
+          <li className="nav-item">
+            <a href="#" onClick={this.onLogoutClick.bind(this)}>
+              <img className='avatar rouded' src={user.avatar} alt="avatar" title='You must have a Gravatar' />
+              Logout</a>
+          </li>
+        </ul>
+      )
+    } else {
+      authLinks = (
+        <ul className="navbar-nav ml-auto">
+          <li className="nav-item">
+            <Link className="nav-link" to="/register">Sign Up</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/login">Login</Link>
+          </li>
+        </ul>
+      )
+    }
     return (
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
         <div className="container">
@@ -18,14 +51,8 @@ class Navbar extends Component {
               </li>
             </ul>
 
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to="/register">Sign Up</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/login">Login</Link>
-              </li>
-            </ul>
+            {authLinks}
+
           </div>
         </div>
       </nav>
@@ -33,4 +60,19 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+Navbar.proptypes = {
+  auth: PropTypes.object.isRequired,
+  onLogoutUser: PropTypes.func.isRequired
+}
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onLogoutUser: () => dispatch(actionCreators.logoutUser())
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

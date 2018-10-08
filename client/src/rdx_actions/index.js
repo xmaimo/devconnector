@@ -1,1 +1,5 @@
-export { registerUser } from './authactions';
+export {
+  registerUser,
+  loginUser,
+  logoutUser
+} from './authactions';
