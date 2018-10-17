@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from "react-redux";
 
-import * as actionCreators from '../../rdx_actions/index';
+import * as actionCreators from '../../rdx_actions/';
 import TextFieldGroup from '../common/TextFieldGroup';
 
 class Login extends Component {

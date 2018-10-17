@@ -8,6 +8,7 @@ import * as actionCreators from '../../rdx_actions/index';
 class Navbar extends Component {
   onLogoutClick(evt) {
     evt.preventDefault();
+    this.props.onClearCurrentProfile();
     this.props.onLogoutUser();
   }
   render() {
@@ -72,7 +73,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLogoutUser: () => dispatch(actionCreators.logoutUser())
+    onLogoutUser: () => dispatch(actionCreators.logoutUser()),
+    onClearCurrentProfile: () => dispatch(actionCreators.clearCurrentProfile())
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

@@ -1,5 +1,12 @@
 export {
   registerUser,
   loginUser,
-  logoutUser
-} from './authactions';
+  logoutUser,
+  setCurrentUser
+} from './auth';
+
+export {
+  getCurrentProfile,
+  clearCurrentProfile,
+  createProfile
+} from './profile';

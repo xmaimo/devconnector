@@ -6,10 +6,11 @@ import thunk from 'redux-thunk';
 import jwtDecode from 'jwt-decode';
 
 import setAuthToken from './utils/setAuthToken'
-import * as actionCreators from './rdx_actions/authactions';
+import * as actionCreators from './rdx_actions/';
 
-import authReducer from './rdx_reducers/authreducer';
+import authReducer from './rdx_reducers/authReducer';
 import errorReducer from './rdx_reducers/errorReducer';
+import profileReducer from './rdx_reducers/profileReducer';
 
 import './index.css';
 import App from './App';
@@ -17,7 +18,8 @@ import registerServiceWorker from './registerServiceWorker';
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  errors: errorReducer
+  errors: errorReducer,
+  profile: profileReducer
 });
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
@@ -40,6 +42,7 @@ if (localStorage.jwt) {
     // logout the user
     store.dispatch(actionCreators.logoutUser());
     // TODO: Clear current profile
+    store.dispatch(actionCreators.clearCurrentProfile());
     // Redirect to login
     window.location.href = '/login';
   }
