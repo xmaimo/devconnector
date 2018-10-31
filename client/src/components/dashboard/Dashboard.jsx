@@ -5,11 +5,19 @@ import { connect } from 'react-redux'
 
 import * as actionCreators from '../../rdx_actions/';
 
+
+import ProfileActions from './ProfileActions';
 import Spinner from '../common/Spinner';
+import Experience from './Experience';
+import Education from './Education';
 
 class Dashboard extends Component {
-  componentDidMount = () => {
+  componentWillMount = () => {
     this.props.onGetCurrentProfile()
+  }
+
+  onDeleteClick(evt) {
+    this.props.onDeleteAccount();
   }
 
   render() {
@@ -23,9 +31,22 @@ class Dashboard extends Component {
     } else {
       // check if loged in user has profile data
       if (Object.keys(profile).length > 0) {
-        dashboardContent = (<h4>DISPLAY PROFILE</h4>)
+        dashboardContent = (
+          <div>
+            <p className='lead text-muted'>Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link></p>
+
+            <ProfileActions />
+
+            <Experience experience={profile.experience} />
+            <Education education={profile.education} />
+
+            <div style={{ marginBottom: '60px' }}>
+              <button onClick={this.onDeleteClick.bind(this)} className="btn btn-danger">Delete My Account</button>
+            </div>
+          </div>
+        )
       } else {
-        // USer is logged in but has no profile
+        // User is logged in but has no profile
         dashboardContent = (
           <div>
             <p className='lead text-muted'>Welcome {user.name}</p>
@@ -53,8 +74,9 @@ class Dashboard extends Component {
   }
 }
 
-Dashboard.prototypes = {
+Dashboard.propTypes = {
   onGetCurrentProfile: PropTypes.func.isRequired,
+  onDeleteAccount: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired
 }
@@ -66,7 +88,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onGetCurrentProfile: () => dispatch(actionCreators.getCurrentProfile())
+    onGetCurrentProfile: () => dispatch(actionCreators.getCurrentProfile()),
+    onDeleteAccount: () => dispatch(actionCreators.deleteAccount())
   }
 }
 

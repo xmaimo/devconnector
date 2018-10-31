@@ -8,7 +8,9 @@ import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import SelectListGroup from '../common/SelectListGroup';
 import InputGroup from '../common/InputGroup';
 
-import * as actionCreators from '../../rdx_actions/';
+import isEmpty from '../../utils/validation';
+
+import * as actionCreators from '../../rdx_actions';
 
 export class CreateProfile extends Component {
   constructor(props) {
@@ -36,9 +38,51 @@ export class CreateProfile extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.props.onGetCurrentProfile()
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors })
+    }
+    if (nextProps.profile.profile) {
+      const profile = nextProps.profile.profile;
+
+      // Bring skills array back to comma separated values
+      const skillsCSV = profile.skills.join(',')
+
+      // If profile field doesnt exist make empty string
+      profile.handle = !isEmpty(profile.handle) ? profile.handle : '';
+      profile.company = !isEmpty(profile.company) ? profile.company : '';
+      profile.website = !isEmpty(profile.website) ? profile.website : '';
+      profile.status = !isEmpty(profile.status) ? profile.status : '';
+      profile.loaction = !isEmpty(profile.loaction) ? profile.loaction : '';
+      profile.githubusername = !isEmpty(profile.githubusername) ? profile.githubusername : '';
+      profile.bio = !isEmpty(profile.bio) ? profile.bio : '';
+      profile.social = !isEmpty(profile.social) ? profile.social : {};
+      profile.facebook = !isEmpty(profile.social.facebook) ? profile.social.facebook : '';
+      profile.twitter = !isEmpty(profile.social.twitter) ? profile.social.twitter : '';
+      profile.linkedin = !isEmpty(profile.social.linkedin) ? profile.social.linkedin : '';
+      profile.youtube = !isEmpty(profile.social.youtube) ? profile.social.youtube : '';
+      profile.instagram = !isEmpty(profile.social.instagram) ? profile.social.instagram : '';
+
+      // set component fields state
+      this.setState({
+        handle: profile.handle,
+        company: profile.company,
+        website: profile.website,
+        location: profile.location,
+        status: profile.status,
+        skills: skillsCSV,
+        githubusername: profile.githubusername,
+        bio: profile.bio,
+        twitter: profile.twitter,
+        facebook: profile.facebook,
+        linkedin: profile.linkedin,
+        youtube: profile.youtube,
+        instagram: profile.instagram,
+      })
     }
   }
 
@@ -72,6 +116,7 @@ export class CreateProfile extends Component {
 
   render() {
     const { errors, displaySocialInputs } = this.state;
+
     let socialInputs;
 
     if (displaySocialInputs) {
@@ -139,8 +184,7 @@ export class CreateProfile extends Component {
             <div className="col-md-8 m-auto">
               <Link to='/dashboard' className="btn btn-light">Go Back</Link>
 
-              <h1 className="display-4 text-center">Create Your Profile</h1>
-              <p className="lead text-center">Let's get some information to make your profile stand out</p>
+              <h1 className="display-4 text-center">Edit Profile</h1>
 
               <small className="d-block pb-3">* = required field</small>
               <form onSubmit={this.onSubmit}>
@@ -240,9 +284,11 @@ export class CreateProfile extends Component {
   }
 }
 
-CreateProfile.proptypes = {
+CreateProfile.propTypes = {
   errors: PropTypes.object.isRequired,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
+  onCreateProfile: PropTypes.func.isRequired,
+  onGetCurrentProfile: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
@@ -252,7 +298,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onCreateProfile: (newProfile, history) => dispatch(actionCreators.createProfile(newProfile, history))
+    onCreateProfile: (newProfile, history) => dispatch(actionCreators.createProfile(newProfile, history)),
+    onGetCurrentProfile: () => dispatch(actionCreators.getCurrentProfile())
   }
 }
 

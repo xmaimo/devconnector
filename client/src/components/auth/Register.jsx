@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import TextFieldGroup from '../common/TextFieldGroup';
@@ -33,11 +34,9 @@ class Register extends Component {
   }
 
   onChange(evt) {
-
     this.setState({
       [evt.target.name]: evt.target.value
     })
-
   }
 
   onSubmit(evt) {
@@ -49,7 +48,7 @@ class Register extends Component {
       password2: this.state.password2
     }
 
-    this.props.onRegisterUser(newUser)
+    this.props.onRegisterUser(newUser, this.props.history)
     this.setState({ errors: {} })
   }
 
@@ -92,7 +91,7 @@ class Register extends Component {
                 <TextFieldGroup
                   type="password"
                   placeholder="Confirm Password"
-                  name="password"
+                  name="password2"
                   error={password2}
                   value={this.state.password2}
                   onChange={this.onChange} />
@@ -119,9 +118,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onRegisterUser: (user) => dispatch(actionCreators.registerUser(user))
+    onRegisterUser: (user, history) => dispatch(actionCreators.registerUser(user, history))
   }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Register));

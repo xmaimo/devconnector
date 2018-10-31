@@ -4,10 +4,10 @@ import setAuthToken from '../utils/setAuthToken'
 import * as actionTypes from './actionTypes';
 
 // RegisterUser
-export const registerUser = (userData) => {
+export const registerUser = (userData, history) => {
   return (dispatch) => {
     axios.post('/api/users/register', userData)
-      .then(res => console.log(res.data))
+      .then(res => history.push('/login'))
       .catch(err => {
         // here dispatch comes from redux-thunk
         dispatch({
@@ -24,7 +24,6 @@ export const loginUser = (userData) => {
   return (dispatch) => {
     axios.post('/api/users/login', userData)
       .then(res => {
-        console.log(res.data);
         // Save to localStorage
         const { token } = res.data;
         localStorage.setItem('jwt', token);

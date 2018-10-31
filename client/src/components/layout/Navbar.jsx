@@ -19,9 +19,13 @@ class Navbar extends Component {
       authLinks = (
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <a href="#" onClick={this.onLogoutClick.bind(this)}>
+            <Link className="nav-link" to="/dashboard">Dashboard</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/" onClick={this.onLogoutClick.bind(this)}>
               <img className='avatar rouded' src={user.avatar} alt="avatar" title='You must have a Gravatar' />
-              Logout</a>
+              Logout
+            </Link>
           </li>
         </ul>
       )

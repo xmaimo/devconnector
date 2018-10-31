@@ -47,3 +47,7 @@ img {
   width: 40px;
   height: auto;
 }
+
+.table th {
+  width: 200px;
+}

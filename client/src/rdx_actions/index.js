@@ -8,5 +8,12 @@ export {
 export {
   getCurrentProfile,
   clearCurrentProfile,
-  createProfile
+  createProfile,
+  deleteAccount,
+  addExperience,
+  deleteExperience,
+  addEducation,
+  deleteEducation,
+  getProfiles,
+  getProfileByHandle
 } from './profile';
